@@ -1,14 +1,17 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'signing'
 }
 
 group = 'org.ciyex'
-version = '0.1.0'
+version = findProperty('sdkVersion') ?: '0.1.0'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
+    withJavadocJar()
+    withSourcesJar()
 }
 
 repositories {
@@ -22,14 +25,65 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
 }
 
+javadoc {
+    options {
+        encoding = 'UTF-8'
+        addStringOption('Xdoclint:none', '-quiet')
+    }
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
             artifactId = 'ciyex-platform-sdk'
+
+            pom {
+                name = 'Ciyex Platform SDK'
+                description = 'Shared SDK for Ciyex marketplace apps — file storage, service discovery, and platform integration'
+                url = 'https://github.com/ciyex-org/ciyex-platform-sdk'
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'ciyex'
+                        name = 'Ciyex Engineering'
+                        email = 'engineering@ciyex.org'
+                    }
+                }
+
+                scm {
+                    connection = 'scm:git:git://github.com/ciyex-org/ciyex-platform-sdk.git'
+                    developerConnection = 'scm:git:ssh://github.com/ciyex-org/ciyex-platform-sdk.git'
+                    url = 'https://github.com/ciyex-org/ciyex-platform-sdk'
+                }
+            }
         }
     }
+
     repositories {
         mavenLocal()
+        maven {
+            name = 'staging'
+            url = layout.buildDirectory.dir('staging-deploy')
+        }
     }
+}
+
+signing {
+    def signingKey = findProperty('signing.key') ?: System.getenv('GPG_PRIVATE_KEY') ?: ''
+    def signingPassword = findProperty('signing.password') ?: System.getenv('GPG_PASSPHRASE') ?: ''
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications.mavenJava
+}
+
+// Only require signing when publishing to staging (for Central Portal upload)
+tasks.withType(Sign).configureEach {
+    onlyIf { gradle.taskGraph.hasTask(':publishMavenJavaPublicationToStagingRepository') }
 }
