@@ -1,0 +1,92 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "org.ciyex",
+    "module": "ciyex-platform-sdk",
+    "version": "0.1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "9.1.0"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-web",
+          "version": {
+            "requires": "4.0.1"
+          }
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-oauth2-resource-server",
+          "version": {
+            "requires": "4.0.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "ciyex-platform-sdk-0.1.0.jar",
+          "url": "ciyex-platform-sdk-0.1.0.jar",
+          "size": 6067,
+          "sha512": "d9e12dbe4edcddcfba6dbd894901139cfb08b36c890f9dd9abb240736d38aa73177ac1d187a1c28b5818e3374687de391f469348bdcd07eb4c3744f498a8d998",
+          "sha256": "6415f93a50afd8b4ed5869925609318e83280d6ea2ca70e580318b7173916c8b",
+          "sha1": "b657a4d30b3ec2e3cb3bb6e5bf927e8416bf6572",
+          "md5": "91d99b407d4c79093e4ef68cb77a2826"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-web",
+          "version": {
+            "requires": "4.0.1"
+          }
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-oauth2-resource-server",
+          "version": {
+            "requires": "4.0.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "ciyex-platform-sdk-0.1.0.jar",
+          "url": "ciyex-platform-sdk-0.1.0.jar",
+          "size": 6067,
+          "sha512": "d9e12dbe4edcddcfba6dbd894901139cfb08b36c890f9dd9abb240736d38aa73177ac1d187a1c28b5818e3374687de391f469348bdcd07eb4c3744f498a8d998",
+          "sha256": "6415f93a50afd8b4ed5869925609318e83280d6ea2ca70e580318b7173916c8b",
+          "sha1": "b657a4d30b3ec2e3cb3bb6e5bf927e8416bf6572",
+          "md5": "91d99b407d4c79093e4ef68cb77a2826"
+        }
+      ]
+    }
+  ]
+}
