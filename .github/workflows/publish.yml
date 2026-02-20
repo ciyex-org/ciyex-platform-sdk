@@ -4,17 +4,6 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
-    inputs:
-      bump:
-        description: 'Version bump type'
-        required: false
-        default: 'auto'
-        type: choice
-        options:
-          - auto
-          - patch
-          - minor
-          - major
 
 permissions:
   contents: write
@@ -48,43 +37,17 @@ jobs:
             LATEST_TAG="v0.0.0"
           fi
 
-          # Parse version components
+          # Parse version and bump patch
           VERSION="${LATEST_TAG#v}"
           MAJOR=$(echo "$VERSION" | cut -d. -f1)
           MINOR=$(echo "$VERSION" | cut -d. -f2)
           PATCH=$(echo "$VERSION" | cut -d. -f3)
-
-          # Determine bump type
-          BUMP="${{ github.event.inputs.bump || 'auto' }}"
-          if [ "$BUMP" = "auto" ]; then
-            # Check commit messages since last tag
-            if [ "$LATEST_TAG" = "v0.0.0" ]; then
-              COMMITS=$(git log --oneline --format="%s")
-            else
-              COMMITS=$(git log "${LATEST_TAG}..HEAD" --oneline --format="%s")
-            fi
-
-            if echo "$COMMITS" | grep -qiE "^BREAKING CHANGE|^.*!:"; then
-              BUMP="major"
-            elif echo "$COMMITS" | grep -qiE "^feat"; then
-              BUMP="minor"
-            else
-              BUMP="patch"
-            fi
-          fi
-
-          # Bump version
-          case "$BUMP" in
-            major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
-            minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
-            patch) PATCH=$((PATCH + 1)) ;;
-          esac
+          PATCH=$((PATCH + 1))
 
           NEXT_VERSION="${MAJOR}.${MINOR}.${PATCH}"
           echo "version=$NEXT_VERSION" >> "$GITHUB_OUTPUT"
           echo "tag=v$NEXT_VERSION" >> "$GITHUB_OUTPUT"
-          echo "bump=$BUMP" >> "$GITHUB_OUTPUT"
-          echo "Next version: $NEXT_VERSION ($BUMP bump from $LATEST_TAG)"
+          echo "Next version: $NEXT_VERSION (patch bump from $LATEST_TAG)"
 
       - name: Update version in gradle.properties
         run: |
